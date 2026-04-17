@@ -1,92 +1,61 @@
-﻿namespace ConsoleApp2
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Tracing;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp7
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            //Sum/Min/Max/Count
+            int[] num = { 1, 2, 3, 4 };
+            Console.WriteLine(num.Sum());
 
-            //contains
-            string word = "Hello";
-            Console.WriteLine(word.Contains("oll"));
-            // если строка содержит подстраку lo то вывести на консоль success
-            if (word.Contains("lo") == true)
+            string[] words = { "hello", "my", "friend" };
+            int result = words.Sum(x => x.Length);//=> это лябмда выражение 
+            int result2 = words.Count(x => x.Length % 2 == 0);//булевое значение тру 
+
+            Example[] examples = new Example[3];
+            for (int i = 0;i<3;i++)
             {
-                Console.WriteLine("Success");
+                examples[i] = new Example(i);
             }
-            else
-            {
-                Console.WriteLine("NO");
-            }
-            char[] example = { 'a', '.', '0' };
-            Console.WriteLine(example.Contains('a'));
-            char[] punc = new char[] { '.', '!', '?', ',', ':', '\"', ';', '–', '(', ')', '[', ']', '{', '}', '/' };//new char[] можно не писать 
-            char x = 'a';
-            if (punc.Contains(x))
-            {
-                Console.WriteLine("The symbool is punc");
-            }
-            else
-            {
-                Console.WriteLine("it is not punc");
-            }
+            result = examples.Sum(x => x.Num);
 
 
-            //Replace
-            string text = "Cat dog love";
-            string text1 = text.Replace("dog", "more cats");
-            Console.WriteLine(text.Replace("dog", "more cats"));// 1 это что меняем, 2 на что меняем. если несколько одинаковых элементов то заменяется все 
+            //Any, All
+            bool f1 = words.Any(x => x.Length % 3 == 0);
+            bool f2 = words.All(x => x.Length > 1);
 
 
-            //Trim 
-            string word2 = "  cat  ";//удаляем только крайние символы, если захотим убрать т то не получится тк не крайний 
-            string word3 = "cat";
-            Console.WriteLine(word2.Contains(word));
-            word2 = word2.Trim(new char[] {' ', 't'});//очень удобно 
-            Console.WriteLine(word2);
+            //Select, Where, GroupBy возвращает тип группу , Distinct убирает дубликаты 
+            int[] wordsLenght = words.Select(x =>  x.Length).ToArray();//из одного масива в другой, то эрй обязательно тк из масива в другой масив 
+            string[] longWords = words.Where(x => x.Length>2).ToArray();
+            int[] wordsResult = words.Select(x => x.Length)//можно в одну строчку а можно в несколько без разницы 
+                                        .Where(x => x >2)
+                                        .ToArray();
+            string word = "hello123";
+            char[] wordChars = word.ToCharArray();
+            bool f = word.Any(x => char.IsDigit(x));
 
-
-            //Split
-            string text2 = "Hello, my dear 2 friends";
-            string[] dirtywords = text2.Split(' ');//берет текст и делит его по каким то параметрам 
-            foreach(string w in  dirtywords)//for (int i = 0; i < dirtywords.Lenght;  i++)
-            {
-                Console.WriteLine(w);
-            }
-
-
-            //Join 
-            string text3 = String.Join(" ", dirtywords);
-            Console.WriteLine(text3);
-
-
-            //IsDigit/ IsLetter
-            char s = 'a';
-            Console.WriteLine(Char.IsDigit(s));//буллевое
-            Console.WriteLine(Char.IsLetter(s));
-            Console.WriteLine(Char.IsLetterOrDigit(s));//пиши Char.Is и дальше смотри что предлагают
-            //вообще надо для проверок
-
-
-            //ToUpper/ ToLower 
-            string word4 = "Hello";
-            Console.WriteLine(word4.ToUpper());//главное сохранить это где то 
-
-            string vowels = "уеоаыяиюё";
-            vowels += vowels.ToUpper();
-            Console.WriteLine(vowels);
-
-            //абстрактные методы можно заполнять шаблонами какими то 
-
-            //вынести в массив все слова в тексте 
-            string input = "Hello, my dear 2 friends";
-            string[] dyrtiwords = input.Split(' ');
-            for (int i = 0; i< dyrtiwords.Length; i++)
-            {
-                string trimWord = dyrtiwords[i].Trim(punc);
-                Console.WriteLine(trimWord);
-            }
-            
         }
+        public struct Example
+        {
+            private int _num;
+            public int Num => _num;
+
+        }
+        public int Example(string x)
+        {
+            return x.Length;
+        }
+        
+
+       
     }
 }
